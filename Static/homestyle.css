@@ -1,0 +1,145 @@
+ /* Style for address display and disconnect button */
+ #addressDisplay {
+    cursor: pointer; /* Make address clickable */
+    margin-left: 10px; /* Adjust margin */
+    font-size: 16px; /* Adjust font size */
+    margin-top: 5%;
+}
+#disconnectButton {
+display: none; /* Hide disconnect button by default */
+margin-left: 3%; /* Adjust spacing between address and disconnect button */
+font-size: 16px; /* Increase font size for better visibility */
+padding: 6px 12px; /* Add padding for better appearance */
+background-color: #e74c3c; /* Example background color for visibility */
+color: white; /* Text color for contrast */
+border: none; /* Remove default border */
+border-radius: 4px; /* Rounded corners for aesthetics */
+cursor: pointer; /* Pointer cursor on hover */
+transition: background-color 0.3s ease; /* Smooth background color transition */
+position: relative; /* Allows precise positioning */
+left: -30px; /* Move button to the left */
+margin-top: 5%;
+}
+
+#disconnectButton:hover {
+background-color: #c0392b; /* Darker background color on hover */
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+ 
+ /* Video background styles */
+ .video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Overlay container for content on top of the video */
+.overlay {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    z-index: 1;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.overlay h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    animation: fadeInDown 1s ease-in-out;
+}
+
+.overlay p {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    animation: fadeInUp 1.5s ease-in-out;
+}
+
+.overlay .enter-button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #ff5e57;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    animation: pulse 2s infinite;
+}
+
+.overlay .enter-button:hover {
+    background-color: red;
+}
+
+/* Navbar styles */
+/* General styles */
+
+
+/* Navbar styling */
+/* General styles */
+
+
+/* Navbar styling */
+.navbar {
+    background-color: #000; /* Pure black background */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 60px; /* Adjust as needed */
+    display: flex;
+    justify-content: flex-end; /* Aligns the link to the right */
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+}
+
+/* Link styling */
+#loginLink {
+  
+ 
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px; /* Reduced padding */
+    border-radius: 5px;
+    background-color: #000; /* Black background */
+    transition: all 0.4s ease;
+    font-size: 0.9rem; /* Smaller font size */
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); /* Subtle shadow */
+    margin-right: 5%;
+    margin-top: 5%;
+   
+    
+}
+
+/* Hover effect */
+#loginLink:hover {
+    color: #000;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* White glow */
+    transform: scale(1.05); /* Slight zoom effect */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Enhanced glow */
+}

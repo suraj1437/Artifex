@@ -1,0 +1,226 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'homestyle.css' %}">
+    
+</head>
+
+<body>
+    <!-- Video background -->
+    <video class="video-background" autoplay muted loop>
+        <source src="{% static 'videos/226718.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" id="loginLink">Connect Wallet</a>
+        <span id="addressDisplay" style="display: none;">Not connected</span>
+        <button id="disconnectButton">Disconnect</button>
+    </nav>
+
+    <!-- Content overlay -->
+    <div class="overlay" style="margin-top: -10%;">
+        <h1>Welcome to ARTifex!</h1>
+        <p>Where trading crypto is as easy as pie—if pie were made of blockchain and witty algorithms. <br> Dive in and let’s turn those digital dreams into reality!</p>
+        
+        <button class="enter-button" id="enterDappButton">Enter Dapp</button>
+    </div>
+
+    <main class="content">
+        <section class="top">
+            <div class="curved-boxes-container" style="margin-top: -20%;">
+                <div class="curved-box">
+                    <h3>Decentralization</h3>
+                    <p>
+                        Decentralization eliminates a single point of control, distributing authority across a network. This means no one entity has full control over the system.
+                    </p>
+                    <p>
+                        It's like running a pizza place where everyone gets a say in the menu—no single manager calling the shots, and you can have any topping you want!
+                    </p>
+                </div>
+                <div class="curved-box">
+                    <h3>Smart Contracts</h3>
+                    <p>
+                        Smart contracts are self-executing contracts with the terms directly written into code. They automatically enforce and execute terms of an agreement based on predefined rules.
+                    </p>
+                    <p>
+                        Imagine a vending machine for deals: you put in your tokens, and it automatically delivers your agreement—no human interaction needed!
+                    </p>
+                </div>
+                <div class="curved-box">
+                    <h3>Consensus Mechanisms</h3>
+                    <p>
+                        Consensus mechanisms are protocols used to achieve agreement on the state of a blockchain. They ensure all participants in the network agree on a single version of the truth.
+                    </p>
+                    <p>
+                        Think of it as a class vote on the best ice cream flavor—everyone agrees, and there's no debate about the final choice!
+                    </p>
+                </div>
+                <div class="curved-box">
+                    <h3>Cryptography</h3>
+                    <p>
+                        Cryptography involves techniques for secure communication, ensuring that only authorized parties can decipher the information being transmitted.
+                    </p>
+                    <p>
+                        It's like having a secret code for your diary that only you can read—no one else will ever know what's inside!
+                    </p>
+                </div>
+                <div class="curved-box">
+                    <h3>Tokenization</h3>
+                    <p>
+                        Tokenization is the process of converting physical or non-physical assets into digital tokens on a blockchain, which can then be traded or used in digital transactions.
+                    </p>
+                    <p>
+                        Imagine turning your old comic books into digital tokens—now you can trade them without worrying about paper cuts or missing pages!
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginLink = document.getElementById('loginLink');
+            const addressDisplay = document.getElementById('addressDisplay');
+            const disconnectButton = document.getElementById('disconnectButton');
+            const enterDappButton = document.getElementById('enterDappButton');
+
+            // Check if MetaMask is connected
+            checkMetaMaskConnection();
+
+            loginLink.addEventListener('click', async (event) => {
+                event.preventDefault();
+
+                if (typeof window.ethereum !== 'undefined') {
+                    try {
+                        await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                        const web3 = new Web3(window.ethereum);
+                        const accounts = await web3.eth.getAccounts();
+                        const userAddress = accounts[0];
+
+                        // Store user address in localStorage
+                        localStorage.setItem('userAddress', userAddress);
+
+                        // Update UI with the connected address
+                        updateAddressDisplay(userAddress);
+
+                        fetch('{% url "login_with_metamask" %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken'),
+                            },
+                            body: JSON.stringify({ address: userAddress })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Logged in successfully!');
+                                window.location.href = '{% url "home" %}';
+                            } else {
+                                alert('Login failed!');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    } catch (error) {
+                        console.error('Error accessing MetaMask:', error);
+                    }
+                } else {
+                    alert('MetaMask is not installed!');
+                }
+            });
+
+            enterDappButton.addEventListener('click', () => {
+                const userAddress = localStorage.getItem('userAddress');
+                if (userAddress) {
+                    window.location.href = '{% url "trade_page" %}'; // Redirect to trade view
+                } else {
+                    alert('Please connect to Metamask.');
+                }
+            });
+
+            // Check MetaMask connection and update UI
+            function checkMetaMaskConnection() {
+                const userAddress = localStorage.getItem('userAddress');
+                if (userAddress) {
+                    updateAddressDisplay(userAddress);
+                } else {
+                    addressDisplay.style.display = 'none';
+                    disconnectButton.style.display = 'none';
+                    loginLink.style.display = 'inline'; // Show the Connect Wallet button
+                }
+            }
+
+            function updateAddressDisplay(address) {
+                if (addressDisplay) {
+                    // Display only the first 5 and last 4 characters of the address
+                    addressDisplay.textContent = `${address.slice(0, 5)}...${address.slice(-4)}`;
+                    addressDisplay.style.display = 'inline'; // Show the address
+                    disconnectButton.style.display = 'inline'; // Show the Disconnect button
+                    loginLink.style.display = 'none'; // Hide the Connect Wallet button
+
+                    addressDisplay.addEventListener('click', () => {
+                        if (confirm('Do you want to disconnect?')) {
+                            disconnect();
+                        }
+                    });
+
+                    disconnectButton.addEventListener('click', () => {
+                        if (confirm('Do you want to disconnect?')) {
+                            disconnect();
+                        }
+                    });
+                }
+            }
+
+            function disconnect() {
+                // Remove the user address from localStorage and update UI
+                localStorage.removeItem('userAddress');
+                addressDisplay.textContent = 'Not connected';
+                addressDisplay.style.display = 'none'; // Hide the address
+                disconnectButton.style.display = 'none'; // Hide the Disconnect button
+                loginLink.style.display = 'inline'; // Show the Connect Wallet button
+            }
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
+
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                var bitcoinDiv = document.getElementById('bitcoin');
+                if (bitcoinDiv) {
+                    bitcoinDiv.classList.remove('hidden'); // Show the div when the page is loaded
+                } else {
+                    console.error('Element with ID "bitcoin" not found.');
+                }
+            }, 10000); // Delay in milliseconds (e.g., 10000 ms = 10 seconds)
+        };
+    </script>
+</body>
+
+</html>
