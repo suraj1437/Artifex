@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Nft_Analytics import views  # Import views from the Nft_Analytics app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.home, name='home'),
+    path('login/', views.login_with_metamask, name='login_with_metamask'),
+    path('fetch_crypto_data/', views.fetch_crypto_data, name='fetch_crypto_data'),
+    path('trade/', views.trade_page, name='trade_page'),
 ]
+

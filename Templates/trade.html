@@ -1,0 +1,198 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Cryptocurrencies</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'homestyle.css' %}">
+    <link rel="stylesheet" href="{% static 'trade.css' %}">
+    
+</head>
+<body>
+  
+    <nav class="navbar">
+            <a href="#" id="loginLink">Connect Wallet</a>
+        </nav>
+    </nav>
+    <main>
+        <h1>
+            <span class="word">Top </span>
+            <span class="word">Cryptocurrencie<span class="superscript">s</span></span>
+        </h1>
+        <table id="cryptoTable">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Price (USD)</th>
+                    <th>Market Cap (USD)</th>
+                    <th>24h Change</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+        <button id="nextPage">Next</button>
+
+        <!-- Meme Section -->
+        <div class="meme-container">
+            <p>When you’ve been staring at charts all day, but the only thing you're gaining is a headache</p>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="chart-container">
+            <div class="chart" id="topGainersChart">
+                <canvas id="topGainersCanvas"></canvas>
+            </div>
+            <div class="chart" id="topLosersChart">
+                <canvas id="topLosersCanvas"></canvas>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentPage = 1;
+            const limit = 10;
+
+            function fetchCryptoData(page) {
+                fetch(`/fetch_crypto_data/?page=${page}&limit=${limit}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.querySelector('#cryptoTable tbody');
+                        tableBody.innerHTML = '';
+
+                        data.forEach(crypto => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${crypto.market_cap_rank}</td>
+                                <td>${crypto.name}</td>
+                                <td>${crypto.symbol.toUpperCase()}</td>
+                                <td>$${crypto.current_price.toLocaleString()}</td>
+                                <td>$${crypto.market_cap.toLocaleString()}</td>
+                                <td>${crypto.price_change_percentage_24h.toFixed(2)}%</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+
+                        updateCharts(data);
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            }
+
+            function updateCharts(data) {
+                // Assuming data contains top gainers and losers
+                const topGainers = data.slice(0, 5);
+                const topLosers = data.slice(-5).reverse();
+
+                const topGainersChart = new Chart(document.getElementById('topGainersCanvas'), {
+                    type: 'bar',
+                    data: {
+                        labels: topGainers.map(crypto => crypto.name),
+                        datasets: [{
+                            label: 'Top Gainers',
+                            data: topGainers.map(crypto => crypto.price_change_percentage_24h),
+                            backgroundColor: '#00e6e6',
+                            borderColor: '#004d4d',
+                            borderWidth: 1,
+                            hoverBackgroundColor: '#004d4d',
+                            hoverBorderColor: '#00e6e6',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: '#00e6e6'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return `${tooltipItem.label}: ${tooltipItem.raw.toFixed(2)}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const topLosersChart = new Chart(document.getElementById('topLosersCanvas'), {
+                    type: 'bar',
+                    data: {
+                        labels: topLosers.map(crypto => crypto.name),
+                        datasets: [{
+                            label: 'Top Losers',
+                            data: topLosers.map(crypto => crypto.price_change_percentage_24h),
+                            backgroundColor: '#ff4d4d',
+                            borderColor: '#cc0000',
+                            borderWidth: 1,
+                            hoverBackgroundColor: '#cc0000',
+                            hoverBorderColor: '#ff4d4d',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: '#ff4d4d'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return `${tooltipItem.label}: ${tooltipItem.raw.toFixed(2)}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            document.querySelector('#nextPage').addEventListener('click', () => {
+                currentPage++;
+                fetchCryptoData(currentPage);
+            });
+
+            fetchCryptoData(currentPage);
+        });
+    </script>
+    
+</body>
+</html>
