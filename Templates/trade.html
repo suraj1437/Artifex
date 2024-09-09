@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +8,11 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'homestyle.css' %}">
     <link rel="stylesheet" href="{% static 'trade.css' %}">
-    
 </head>
 <body>
-  
-    <nav class="navbar">
-            <a href="#" id="loginLink">Connect Wallet</a>
-        </nav>
-    </nav>
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+
     <main>
         <h1>
             <span class="word">Top </span>
@@ -55,7 +51,43 @@
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script>
+        // Redirect to homepage if wallet is not connected
+        async function checkWalletConnection() {
+            if (typeof window.ethereum !== 'undefined') {
+                const accounts = await ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length === 0) {
+                    // No wallet connected, redirect to homepage
+                    window.location.href = "/";
+                } else {
+                    // Wallet connected
+                    document.getElementById('loginLink').textContent = 'Wallet Connected';
+                }
+            } else {
+                // No MetaMask found, redirect to homepage
+                window.location.href = "/";
+            }
+        }
+
+        // Call the function on page load
+        checkWalletConnection();
+
+        // Wallet connection logic
+        document.getElementById('loginLink').addEventListener('click', async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    document.getElementById('loginLink').textContent = 'Wallet Connected';
+                } catch (error) {
+                    console.error('User denied account access');
+                }
+            } else {
+                alert('MetaMask not found. Please install it to connect your wallet.');
+            }
+        });
+
+        // Your existing script to fetch and display crypto data
         document.addEventListener('DOMContentLoaded', () => {
             let currentPage = 1;
             const limit = 10;
@@ -86,7 +118,6 @@
             }
 
             function updateCharts(data) {
-                // Assuming data contains top gainers and losers
                 const topGainers = data.slice(0, 5);
                 const topLosers = data.slice(-5).reverse();
 
@@ -107,9 +138,7 @@
                     options: {
                         responsive: true,
                         scales: {
-                            x: {
-                                beginAtZero: true
-                            },
+                            x: { beginAtZero: true },
                             y: {
                                 beginAtZero: true,
                                 ticks: {
@@ -154,9 +183,7 @@
                     options: {
                         responsive: true,
                         scales: {
-                            x: {
-                                beginAtZero: true
-                            },
+                            x: { beginAtZero: true },
                             y: {
                                 beginAtZero: true,
                                 ticks: {
@@ -193,6 +220,5 @@
             fetchCryptoData(currentPage);
         });
     </script>
-    
 </body>
 </html>

@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Dashboard</title>
+    
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'homestyle.css' %}">
+    <link rel="stylesheet" href="{% static 'sidebar.css' %}">
+   
+</head>
+<body>
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="https://res.coinpaper.com/coinpaper/bitcoin_diamond_bcd_logo_a82072a3e3.png" alt="Crypto Logo">
+            <h1>Dashboard</h1>
+        </div>
+        <a href="#visualizations">Crypto Market</a>
+        <a href="#facts">Facts</a>
+        <a href="#history">History</a>
+        <a href="#market">Market Data</a>
+        <a href="{% url 'trade_page' %}">Trade</a>
+        <!-- Additional Links -->
+        <a href="#resources">Resources</a>
+        <a href="#support">Support</a>
+        <a href="#community">Community</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Top Section for Real-time Facts -->
+        <div class="top-section">
+            <div class="fact-item" id="market-cap">
+                <h2>Market Cap</h2>
+                <p id="market-cap-value">$1.2 Trillion</p>
+            </div>
+            <div class="fact-item" id="btc-price">
+                <h2>BTC Price</h2>
+                <p id="btc-price-value">$25,000</p>
+            </div>
+            <div class="fact-item" id="volume">
+                <h2>24h Volume</h2>
+                <p id="volume-value">$150 Billion</p>
+            </div>
+        </div>
+
+        <!-- NFT Section with Continuous Scroll -->
+        <div class="nft-section">
+            <div class="nft-wrapper">
+                <img src="{% static 'images/nft1.webp' %}" alt="NFT 1">
+                <img src="{% static 'images/nft2.webp' %}" alt="NFT 2">
+                <img src="{% static 'images/nft3.webp' %}" alt="NFT 3">
+                <img src="{% static 'images/nft4.jpg' %}" alt="NFT 4">
+                <img src="{% static 'images/nft5.jpg' %}" alt="NFT 5">
+                <!-- Duplicate images for seamless scroll -->
+                <img src="{% static 'images/nft1.webp' %}" alt="NFT 1">
+                <img src="{% static 'images/nft2.webp' %}" alt="NFT 2">
+                <img src="{% static 'images/nft3.webp' %}" alt="NFT 3">
+                <img src="{% static 'images/nft4.jpg' %}" alt="NFT 4">
+                <img src="{% static 'images/nft5.jpg' %}" alt="NFT 5">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

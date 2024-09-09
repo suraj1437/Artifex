@@ -24,5 +24,6 @@ urlpatterns = [
     path('login/', views.login_with_metamask, name='login_with_metamask'),
     path('fetch_crypto_data/', views.fetch_crypto_data, name='fetch_crypto_data'),
     path('trade/', views.trade_page, name='trade_page'),
+    path('sidebar/', views.sidebar_page, name='sidebar_page'),
 ]
 

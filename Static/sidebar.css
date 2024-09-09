@@ -1,0 +1,175 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1c1c1c;
+    color: white;
+    margin: 0;
+}
+
+/* Content adjustment below navbar */
+.content {
+    padding-left: 20%; /* Space for sidebar */
+    padding-top: 80px; /* Adjust for navbar height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center main content */
+    min-height: 100vh; /* Full height */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 20%;
+    height: 100vh;
+    background-color: #000; /* Fully black background */
+    position: fixed;
+    top: 60px; /* Below navbar */
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px; /* Increased padding */
+    z-index: 100;
+    border-right: 2px solid #333;
+    overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 40px; /* Increased margin for spacing */
+    position: relative;
+}
+
+.logo img {
+    width: 120px; /* Increased size for logo */
+    border: none;
+    border-radius: 10px; /* Added border radius */
+    animation: spin 10s linear infinite; /* Spinning animation */
+}
+
+.logo h1 {
+    font-size: 2.5rem; /* Increased font size */
+    color: #f7931a; /* Bitcoin color */
+    margin-top: 20px; /* Margin to separate from logo */
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: white;
+    padding: 15px 20px; /* Increased padding for better click area */
+    font-size: 1.4rem; /* Increased font size */
+    display: block;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
+    border-radius: 10px; /* Added border radius */
+    margin-bottom: 10px; /* Added margin between links */
+    position: relative; /* For pseudo-element positioning */
+}
+
+.sidebar a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f7931a; /* Bitcoin color */
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1; /* Behind the text */
+}
+
+.sidebar a:hover::before {
+    opacity: 0.3; /* Adjusted opacity for better visibility */
+}
+
+.sidebar a:hover {
+    color: #000;
+    background-color: #f7931a; /* Bitcoin color */
+}
+
+/* Keyframes for spinning logo */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Top Section (Crypto Market Facts) */
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%; /* Adjusted to use more space */
+    padding: 20px;
+    margin-top: -220px; /* Moved down a bit */
+}
+
+.fact-item {
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 30%;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    position: relative;
+    margin: 0 10px; /* Added margin for spacing */
+}
+
+.fact-item:before {
+    content: '💡'; /* Add light bulb before text */
+    position: absolute;
+    top: -25px; /* Adjusted to move up */
+    left: calc(50% - 10px);
+    font-size: 24px;
+    color: yellow;
+}
+
+.fact-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #f7931a; /* Bitcoin color */
+}
+
+/* Fix for NFT Section */
+/* Fix for NFT Section */
+.nft-section {
+    background-color: #000;
+    padding: 20px 0;
+    overflow: hidden;
+    width: 80%;
+    position: relative;
+    margin-top: 40px;
+    /* Ensure the container height is set to prevent overflow issues */
+    height: 200px;
+}
+
+.nft-wrapper {
+    display: flex;
+    width: calc(200% + 200px); /* Increased width to cover scrolling */
+    animation: scroll 20s linear infinite;
+}
+
+.nft-wrapper img {
+    width: 200px;
+    margin: 0 10px; /* Adjusted margin */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Adjust scrolling keyframes to match container width */
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+
+.nft-wrapper img:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}

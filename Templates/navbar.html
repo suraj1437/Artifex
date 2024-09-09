@@ -1,0 +1,122 @@
+{% load static %}
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="#" id="loginLink">Connect Wallet</a>
+    <span id="addressDisplay" style="display: none;margin-top: 2%;">Not connected</span>
+    <button id="disconnectButton" style="display: none;margin-top: 2%;">Disconnect</button>
+</nav>
+
+<!-- JavaScript for Navbar -->
+<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginLink = document.getElementById('loginLink');
+        const addressDisplay = document.getElementById('addressDisplay');
+        const disconnectButton = document.getElementById('disconnectButton');
+
+        // Check if MetaMask is connected
+        checkMetaMaskConnection();
+
+        loginLink.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                    const web3 = new Web3(window.ethereum);
+                    const accounts = await web3.eth.getAccounts();
+                    const userAddress = accounts[0];
+
+                    // Store user address in localStorage
+                    localStorage.setItem('userAddress', userAddress);
+
+                    // Update UI with the connected address
+                    updateAddressDisplay(userAddress);
+
+                    fetch('{% url "login_with_metamask" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify({ address: userAddress })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Logged in successfully!');
+                            window.location.href = '{% url "home" %}';
+                        } else {
+                            alert('Login failed!');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                } catch (error) {
+                    console.error('Error accessing MetaMask:', error);
+                }
+            } else {
+                alert('MetaMask is not installed!');
+            }
+        });
+
+        // Check MetaMask connection and update UI
+        function checkMetaMaskConnection() {
+            const userAddress = localStorage.getItem('userAddress');
+            if (userAddress) {
+                updateAddressDisplay(userAddress);
+            } else {
+                addressDisplay.style.display = 'none';
+                disconnectButton.style.display = 'none';
+                loginLink.style.display = 'inline'; // Show the Connect Wallet button
+            }
+        }
+
+        function updateAddressDisplay(address) {
+            if (addressDisplay) {
+                // Display only the first 5 and last 4 characters of the address
+                addressDisplay.textContent = `${address.slice(0, 5)}...${address.slice(-4)}`;
+                addressDisplay.style.display = 'inline'; // Show the address
+                disconnectButton.style.display = 'inline'; // Show the Disconnect button
+                loginLink.style.display = 'none'; // Hide the Connect Wallet button
+
+                addressDisplay.addEventListener('click', () => {
+                    if (confirm('Do you want to disconnect?')) {
+                        disconnect();
+                    }
+                });
+
+                disconnectButton.addEventListener('click', () => {
+                    if (confirm('Do you want to disconnect?')) {
+                        disconnect();
+                    }
+                });
+            }
+        }
+
+        function disconnect() {
+            // Remove the user address from localStorage and update UI
+            localStorage.removeItem('userAddress');
+            addressDisplay.textContent = 'Not connected';
+            addressDisplay.style.display = 'none'; // Hide the address
+            disconnectButton.style.display = 'none'; // Hide the Disconnect button
+            loginLink.style.display = 'inline'; // Show the Connect Wallet button
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>

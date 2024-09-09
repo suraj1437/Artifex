@@ -44,3 +44,6 @@ def fetch_crypto_data(request):
 
 def trade_page(request):
     return render(request, 'trade.html')
+
+def sidebar_page(request):
+    return render(request, 'sidebar.html')
