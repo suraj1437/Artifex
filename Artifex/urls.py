@@ -17,13 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from Nft_Analytics import views  # Import views from the Nft_Analytics app
+from Nft_Analytics.views import generate_random_nft  # Correct import of views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('login/', views.login_with_metamask, name='login_with_metamask'),
     path('fetch_crypto_data/', views.fetch_crypto_data, name='fetch_crypto_data'),
-    path('trade/', views.trade_page, name='trade_page'),
+    path('trade/', views.tradepage, name='tradepage'),
     path('sidebar/', views.sidebar_page, name='sidebar_page'),
+    path('generate-nft/', views.generate_nft_page, name='generate_nft_page'),
+    path('generate-random-nft/', views.generate_random_nft, name='generate_random_nft'),
+    path('generate_random_nft/', generate_random_nft, name='generate_random_nft'),
+   
 ]
+
+
+
 

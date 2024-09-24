@@ -1,0 +1,38 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.nft-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.nft-wrapper {
+    margin: 20px auto;
+    display: inline-block;
+}
+
+.nft-wrapper img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid white;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+}

@@ -16,18 +16,18 @@
     {% include 'navbar.html' %}
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" style="margin-top: -3%;">
         <div class="logo">
             <img src="https://res.coinpaper.com/coinpaper/bitcoin_diamond_bcd_logo_a82072a3e3.png" alt="Crypto Logo">
             <h1>Dashboard</h1>
         </div>
-        <a href="#visualizations">Crypto Market</a>
-        <a href="#facts">Facts</a>
-        <a href="#history">History</a>
+        <a href="{% url 'tradepage' %}" target="_blank">Crypto Market</a>
+        <a href="#visualizations">Trending</a>
+        <a href="{% url 'generate_nft_page' %}">Generate NFT</a>
+        <a href="#history">Open Positions</a>
         <a href="#market">Market Data</a>
-        <a href="{% url 'trade_page' %}">Trade</a>
         <!-- Additional Links -->
-        <a href="#resources">Resources</a>
+        <a href="#resources">Predictions</a>
         <a href="#support">Support</a>
         <a href="#community">Community</a>
     </div>
